@@ -31,7 +31,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class Fenetre extends JFrame implements MouseListener {
 
-	private JTable tableau=new JTable();
+	private JTable tableau = new JTable();
 	private JSplitPane split;
 	String link = "http://finance.yahoo.com/q;_ylc=X1MDMjE0MjQ3ODk0OARfcgMyBGZyA3VoM19maW5hbmNlX3dlYgRmcjIDc2EtZ3AEZ3ByaWQDBG5fZ3BzAzEwBG9yaWdpbgNmaW5hbmNlLnlhaG9vLmNvbQRwb3MDMQRwcXN0cgMEcXVlcnkDR09PRywEc2FjAzEEc2FvAzE-?p=http%3A%2F%2Ffinance.yahoo.com%2Fq%3Fs%3DGOOG%26ql%3D0&fr=uh3_finance_web&uhb=uh3_finance_vert&s=";
 	String[] links;
@@ -41,13 +41,13 @@ public class Fenetre extends JFrame implements MouseListener {
 			"Transaction", "Acheter", "Vendre" };
 	Object[][] data = {
 			{ sd.getSymbol(), sd.getName(), sd.getPrix_action("YHOO"), 0,
-					sd.getProduit(), 0, "Acheter", "Vendre"},
+					sd.getProduit(), "Montant?", "Acheter", "Vendre" },
 			{ "TSLA", "Tesla", sd.getPrix_action("TSLA"), 0, sd.getProduit(),
-					0, "Acheter", "Vendre"},
+					"Montant?", "Acheter", "Vendre" },
 			{ "INTC", "INTEL", sd.getPrix_action("INTC"), 0, sd.getProduit(),
-					0, "Acheter", "Vendre"},
+					"Montant?", "Acheter", "Vendre" },
 			{ "AIR.PA", "Airbus", sd.getPrix_action("AIR.PA"), 0,
-					sd.getProduit(), 0, "Acheter", "Vendre"},
+					sd.getProduit(), "Montant?", "Acheter", "Vendre" },
 			{ "Total", "", null, 0, 0, null, null, null, null } };
 	private JPanel panneaugauche = new JPanel();
 	private JTabbedPane panneaudroite = new JTabbedPane(SwingConstants.TOP);
@@ -119,26 +119,86 @@ public class Fenetre extends JFrame implements MouseListener {
 	// Actualisation de la page
 	public void refresh(ActionEvent arg0) {
 		StockData sd = new StockData();
-		tableau.getModel().setValueAt(sd.getPrix_action("YHOO"), 0, 2);
+		// TOTAL
+		Object nbaction0 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(0, 3);
+		Object nbaction1 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(1, 3);
+		Object nbaction2 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(2, 3);
+		Object nbaction3 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(3, 3);
+		// Transforme les valeurs en entiers
+		int nba0 = (Integer) nbaction0;
+		int nba1 = (Integer) nbaction1;
+		int nba2 = (Integer) nbaction2;
+		int nba3 = (Integer) nbaction3;
+		Float p0 = sd.getPrix_action("YHOO");
+		// double prix=Double.parseDouble(p);
+		double total0 = p0 * nba0;
+		// On caste colonneprix en double
+		Float p1 = sd.getPrix_action("TSLA");
+		// double prix=Double.parseDouble(p);
+		double total1 = p1 * nba1;
+		// On caste colonneprix en double
+		Float p2 = sd.getPrix_action("INTC");
+		// double prix=Double.parseDouble(p);
+		double total2 = p2 * nba2;
+		// On caste colonneprix en double
+		Float p3 = sd.getPrix_action("AIR.PA");
+		// double prix=Double.parseDouble(p);
+		double total3 = p3 * nba3;
+		double totaltotal = total0 + total1 + total2 + total3;
+		tableau.getModel().setValueAt(p0, 0, 2);
 		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(0, 2);
-		tableau.getModel().setValueAt(sd.getPrix_action("TSLA"), 1, 2);
+		tableau.getModel().setValueAt(p1, 1, 2);
 		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(1, 2);
-		tableau.getModel().setValueAt(sd.getPrix_action("INTC"), 2, 2);
+		tableau.getModel().setValueAt(p2, 2, 2);
 		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(2, 2);
-		tableau.getModel().setValueAt(sd.getPrix_action("AIR.PA"), 3, 2);
+		tableau.getModel().setValueAt(p3, 3, 2);
 		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(3, 2);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total0, 0, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(0, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total1, 1, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(1, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total2, 2, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(2, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total3, 3, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(3, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(totaltotal, 4, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(4, 4);
 	}
 
 	public static void main(String[] args) {
-	new Fenetre();
+		Fenetre f = new Fenetre();
 	}
 
 	public void mouseClicked(MouseEvent e) {
 		Map<String, String> map = new HashMap();
 		Set<Map.Entry<String, String>> entryset = new HashSet();
 		Iterator<Map.Entry<String, String>> it;
-		if (tableau.isCellSelected(tableau.getSelectedRow(), 8)) {
+		if (tableau.isCellSelected(tableau.getSelectedRow(), 5)) {
 			onglet1.removeAll();
+			((AbstractTableModel) tableau.getModel()).setValueAt(
+					"Montant?", 0, 5);
+			((AbstractTableModel) tableau.getModel())
+					.fireTableCellUpdated(0, 5);
+			((AbstractTableModel) tableau.getModel()).setValueAt(
+					"Montant?", 1, 5);
+			((AbstractTableModel) tableau.getModel())
+					.fireTableCellUpdated(1, 5);
+			((AbstractTableModel) tableau.getModel()).setValueAt(
+					"Montant?", 2, 5);
+			((AbstractTableModel) tableau.getModel())
+					.fireTableCellUpdated(2, 5);
+			((AbstractTableModel) tableau.getModel()).setValueAt(
+					"Montant?", 3, 5);
+			((AbstractTableModel) tableau.getModel())
+					.fireTableCellUpdated(3, 5);
+			((AbstractTableModel) tableau.getModel()).setValueAt("",
+					tableau.getSelectedRow(), 5);
+			((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(
+					tableau.getSelectedRow(), 5);
 			Link l = new Link(links[tableau.getSelectedRow()]);
 			map = l.article();
 			entryset = map.entrySet();
