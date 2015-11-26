@@ -1,7 +1,8 @@
 package Livraison2;
-
+import java.awt.Color;
 import java.io.IOException;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
@@ -64,5 +65,5 @@ class ZModel extends AbstractTableModel{
 		  else
 	    return false;
 	  }
-		 
+		
 	}
