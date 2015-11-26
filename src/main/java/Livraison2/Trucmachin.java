@@ -1,5 +1,5 @@
 package Livraison2;
 
-public class Testgithub {
+public class Trucmachin {
 
 }
