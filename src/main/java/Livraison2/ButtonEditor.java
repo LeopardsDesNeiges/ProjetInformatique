@@ -9,6 +9,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
@@ -68,6 +69,9 @@ public class ButtonEditor extends DefaultCellEditor {
 						this.row, (this.column - 1)) == null
 						|| ((AbstractTableModel) table.getModel()).getValueAt(
 								this.row, (this.column - 1)) == "Montant?") {
+					//Boîte du message préventif
+					JOptionPane jop = new JOptionPane();
+					jop.showMessageDialog(null, "Entrez un entier positif", "Attention", JOptionPane.WARNING_MESSAGE);
 					((AbstractTableModel) table.getModel()).setValueAt(0,
 							this.row, (this.column - 1));
 				}
@@ -172,6 +176,8 @@ public class ButtonEditor extends DefaultCellEditor {
 						this.row, (5)) == null
 						|| ((AbstractTableModel) table.getModel()).getValueAt(
 								this.row, (5)) == "Montant?") {
+					JOptionPane jop = new JOptionPane();
+					jop.showMessageDialog(null, "Entrez un entier positif", "Attention", JOptionPane.WARNING_MESSAGE);
 					((AbstractTableModel) table.getModel()).setValueAt(0,
 							this.row, (5));
 				}
