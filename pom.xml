@@ -3,28 +3,54 @@
   <groupId>leoneige</groupId>
   <artifactId>loic</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <dependencies>
-  <dependency>
-   <groupId>com.yahoofinance-api</groupId>
-    <artifactId>YahooFinanceAPI</artifactId>
-    <version>2.0.0</version>
-  </dependency>
-  <dependency>
-			<groupId>rome</groupId>
-			<artifactId>rome</artifactId>
-			<version>0.9</version>
+  
+	<dependencies>
+		<dependency>
+			<groupId>com.yahoofinance-api</groupId>
+			<artifactId>YahooFinanceAPI</artifactId>
+			<version>2.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jcommon</artifactId>
+			<version>1.0.23</version>
+
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+
+		</dependency>
+
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.14</version>
+		</dependency>
+
+
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.11</version>
 			<scope>test</scope>
+
 		</dependency>
+
+
 		<dependency>
-			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.8.3</version>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.7</version>
 		</dependency>
-  </dependencies>
+
+	</dependencies>
 </project>

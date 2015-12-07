@@ -1,4 +1,5 @@
 package Livraison2;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class StockData {
 	private int nbr_action=0;
 	private JTable table = null;
 	
-// Tous les getters et setters. Certains sont peut-être inutiles.
+// Tous les getters et setters. Certains sont peut-etre inutiles.
 	
 	public String getSymbol() {
 		return symbol;

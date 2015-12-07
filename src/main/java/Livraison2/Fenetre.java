@@ -9,12 +9,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,9 +32,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
+
+import org.jfree.chart.ChartPanel;
+
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
+import yahoofinance.histquotes.HistoricalQuote;
+import yahoofinance.histquotes.Interval;
 
 public class Fenetre extends JFrame implements MouseListener {
 
@@ -36,24 +49,38 @@ public class Fenetre extends JFrame implements MouseListener {
 	String link = "http://finance.yahoo.com/q;_ylc=X1MDMjE0MjQ3ODk0OARfcgMyBGZyA3VoM19maW5hbmNlX3dlYgRmcjIDc2EtZ3AEZ3ByaWQDBG5fZ3BzAzEwBG9yaWdpbgNmaW5hbmNlLnlhaG9vLmNvbQRwb3MDMQRwcXN0cgMEcXVlcnkDR09PRywEc2FjAzEEc2FvAzE-?p=http%3A%2F%2Ffinance.yahoo.com%2Fq%3Fs%3DGOOG%26ql%3D0&fr=uh3_finance_web&uhb=uh3_finance_vert&s=";
 	String[] links;
 	StockData sd = new StockData();
+	BDD bdd = new BDD("BDD.sqlite");
 
 	String title[] = { "Symbole", "Nom", "Prix action", "Nbr actions", "Total",
 			"Transaction", "Acheter", "Vendre" };
 	Object[][] data = {
-			{ sd.getSymbol(), sd.getName(), sd.getPrix_action("YHOO"), 0,
-					sd.getProduit(), "Montant?", "Acheter", "Vendre" },
-			{ "TSLA", "Tesla", sd.getPrix_action("TSLA"), 0, sd.getProduit(),
+			{ sd.getSymbol(), sd.getName(), sd.getPrix_action("YHOO"),
+					bdd.getNbrAction("Yhoo"),
+					sd.getPrix_action("YHOO") * bdd.getNbrAction("Yhoo"),
 					"Montant?", "Acheter", "Vendre" },
-			{ "INTC", "INTEL", sd.getPrix_action("INTC"), 0, sd.getProduit(),
+			{ "TSLA", "Tesla", sd.getPrix_action("TSLA"),
+					bdd.getNbrAction("TSLA"),
+					sd.getPrix_action("TSLA") * bdd.getNbrAction("TSLA"),
 					"Montant?", "Acheter", "Vendre" },
-			{ "AIR.PA", "Airbus", sd.getPrix_action("AIR.PA"), 0,
-					sd.getProduit(), "Montant?", "Acheter", "Vendre" },
-			{ "Total", "", null, 0, 0, null, null, null, null } };
+			{ "INTC", "INTEL", sd.getPrix_action("INTC"),
+					bdd.getNbrAction("INTC"),
+					sd.getPrix_action("INTC") * bdd.getNbrAction("INTC"),
+					"Montant?", "Acheter", "Vendre" },
+			{ "AIR.PA", "Airbus", sd.getPrix_action("AIR.PA"),
+					bdd.getNbrAction("AIR.PA"),
+					sd.getPrix_action("AIR.PA") * bdd.getNbrAction("AIR.PA"),
+					"Montant?", "Acheter", "Vendre" },
+			{ "Total", "", null, null, null, null, null, null, null } };
 	private JPanel panneaugauche = new JPanel();
 	private JTabbedPane panneaudroite = new JTabbedPane(SwingConstants.TOP);
 	private JPanel onglet1 = new JPanel();
-	private JPanel onglet2 = new JPanel();
-	private JLabel truc = new JLabel("Faut mettre l'historique ici");
+	private ChartPanel onglet2;
+	private ChartPanel onglet3;
+	private LineChart_AWT chartDay = new LineChart_AWT("Day",
+			"Valeur de l'action Volkswagen","truc");
+	//Historique des prix de Yahoo, affiché de base sans cliquer que quoique ce soit
+	private LineChart_AWT chartMonth = new LineChart_AWT("Month",
+			"Valeur de l'action Volkswagen", "YHOO");
 
 	public Fenetre() {
 		this.setTitle("Porte-Feuille avec onglets");
@@ -76,9 +103,12 @@ public class Fenetre extends JFrame implements MouseListener {
 		// Panneau de droite
 		onglet1.setBackground(Color.lightGray);
 		onglet1.setLayout(new FlowLayout(0));
-		onglet2.add(truc);
+		onglet2 = chartDay.chartPanel;
+		onglet3 = chartMonth.chartPanel;
+		// onglet2.add(chart);
 		panneaudroite.addTab("News", onglet1);
-		panneaudroite.addTab("Historique", onglet2);
+		panneaudroite.addTab("Historique Journalier", onglet2);
+		panneaudroite.addTab("Historique Mensuel", onglet3);
 		container.add(panneaudroite, BorderLayout.EAST);
 		links = new String[(tableau.getRowCount() - 1)];
 
@@ -169,8 +199,69 @@ public class Fenetre extends JFrame implements MouseListener {
 		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(4, 4);
 	}
 
-	public static void main(String[] args) {
-		Fenetre f = new Fenetre();
+	public void refreshautomatique() {
+		StockData sd = new StockData();
+		// TOTAL
+		Object nbaction0 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(0, 3);
+		Object nbaction1 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(1, 3);
+		Object nbaction2 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(2, 3);
+		Object nbaction3 = ((AbstractTableModel) tableau.getModel())
+				.getValueAt(3, 3);
+		// Transforme les valeurs en entiers
+		int nba0 = (Integer) nbaction0;
+		int nba1 = (Integer) nbaction1;
+		int nba2 = (Integer) nbaction2;
+		int nba3 = (Integer) nbaction3;
+		Float p0 = sd.getPrix_action("YHOO");
+		// double prix=Double.parseDouble(p);
+		double total0 = p0 * nba0;
+		// On caste colonneprix en double
+		Float p1 = sd.getPrix_action("TSLA");
+		// double prix=Double.parseDouble(p);
+		double total1 = p1 * nba1;
+		// On caste colonneprix en double
+		Float p2 = sd.getPrix_action("INTC");
+		// double prix=Double.parseDouble(p);
+		double total2 = p2 * nba2;
+		// On caste colonneprix en double
+		Float p3 = sd.getPrix_action("AIR.PA");
+		// double prix=Double.parseDouble(p);
+		double total3 = p3 * nba3;
+		double totaltotal = total0 + total1 + total2 + total3;
+		tableau.getModel().setValueAt(p0, 0, 2);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(0, 2);
+		tableau.getModel().setValueAt(p1, 1, 2);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(1, 2);
+		tableau.getModel().setValueAt(p2, 2, 2);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(2, 2);
+		tableau.getModel().setValueAt(p3, 3, 2);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(3, 2);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total0, 0, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(0, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total1, 1, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(1, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total2, 2, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(2, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(total3, 3, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(3, 4);
+		((AbstractTableModel) tableau.getModel()).setValueAt(totaltotal, 4, 4);
+		((AbstractTableModel) tableau.getModel()).fireTableCellUpdated(4, 4);
+	}
+
+	public static void main(String[] args) throws IOException {
+
+		Date date1 = new Date();
+		SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String aujourdhui = simpleFormat.format(date1);
+		final Fenetre f = new Fenetre();
+		/*
+		 * Timer timer=new Timer(); timer.schedule (new TimerTask(){ public void
+		 * run() { f.refreshautomatique(); } },0,120000);
+		 */
+		
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -179,20 +270,22 @@ public class Fenetre extends JFrame implements MouseListener {
 		Iterator<Map.Entry<String, String>> it;
 		if (tableau.isCellSelected(tableau.getSelectedRow(), 5)) {
 			onglet1.removeAll();
-			((AbstractTableModel) tableau.getModel()).setValueAt(
-					"Montant?", 0, 5);
+			//j'enlève l'onglet3, pour le remettre plus tard #pasbien
+			panneaudroite.remove(onglet3);
+			((AbstractTableModel) tableau.getModel()).setValueAt("Montant?", 0,
+					5);
 			((AbstractTableModel) tableau.getModel())
 					.fireTableCellUpdated(0, 5);
-			((AbstractTableModel) tableau.getModel()).setValueAt(
-					"Montant?", 1, 5);
+			((AbstractTableModel) tableau.getModel()).setValueAt("Montant?", 1,
+					5);
 			((AbstractTableModel) tableau.getModel())
 					.fireTableCellUpdated(1, 5);
-			((AbstractTableModel) tableau.getModel()).setValueAt(
-					"Montant?", 2, 5);
+			((AbstractTableModel) tableau.getModel()).setValueAt("Montant?", 2,
+					5);
 			((AbstractTableModel) tableau.getModel())
 					.fireTableCellUpdated(2, 5);
-			((AbstractTableModel) tableau.getModel()).setValueAt(
-					"Montant?", 3, 5);
+			((AbstractTableModel) tableau.getModel()).setValueAt("Montant?", 3,
+					5);
 			((AbstractTableModel) tableau.getModel())
 					.fireTableCellUpdated(3, 5);
 			((AbstractTableModel) tableau.getModel()).setValueAt("",
@@ -203,6 +296,12 @@ public class Fenetre extends JFrame implements MouseListener {
 			map = l.article();
 			entryset = map.entrySet();
 			it = entryset.iterator();
+			//recreer un historique mensuel avec le symbole de la ligne cliquée
+			chartMonth = new LineChart_AWT("Month",
+			"Valeur de l'action Volkswagen",(String) ((AbstractTableModel) tableau.getModel()).getValueAt( tableau.getSelectedRow(),
+					0));
+			// je recrée onglet 3 ici #pasbien
+			onglet3=chartMonth.chartPanel;
 			while (it.hasNext()) {
 				Entry<String, String> s = it.next();
 
@@ -210,8 +309,12 @@ public class Fenetre extends JFrame implements MouseListener {
 				JLabel j = ml.jl;
 				onglet1.add(j);
 			}
+			// je rajoute onglet 3 au panneau de droite #pasbien
+			panneaudroite.addTab("Historique Mensuel",onglet3);
 			onglet1.revalidate();
 			onglet1.repaint();
+			panneaudroite.revalidate();
+			panneaudroite.repaint();
 		}
 
 	}

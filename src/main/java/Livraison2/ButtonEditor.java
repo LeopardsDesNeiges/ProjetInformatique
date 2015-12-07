@@ -26,8 +26,7 @@ public class ButtonEditor extends DefaultCellEditor {
 		button.addActionListener(bListener);
 	}
 
-	public Component getTableCellEditorComponent(JTable table, Object value,
-			boolean isSelected, int row, int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// On affecte le numero de ligne au listener
 		bListener.setRow(row);
 		// Idem pour le numero de colonne
@@ -63,17 +62,15 @@ public class ButtonEditor extends DefaultCellEditor {
 			// 6eme colonne c'est Acheter
 			if (this.column == 6) {
 
-				// Si rien n'est Ã©crit dans Transaction alors renvoit 0.
+				// Si rien n'est ecrit dans Transaction alors renvoit 0.
 				// this.column-1= Transaction
-				if (((AbstractTableModel) table.getModel()).getValueAt(
-						this.row, (this.column - 1)) == null
-						|| ((AbstractTableModel) table.getModel()).getValueAt(
-								this.row, (this.column - 1)) == "Montant?") {
-					//Boîte du message préventif
+				if (((AbstractTableModel) table.getModel()).getValueAt(this.row, (this.column - 1)) == null
+						|| ((AbstractTableModel) table.getModel()).getValueAt(this.row,
+								(this.column - 1)) instanceof String) {
+					// Boîte du message préventif
 					JOptionPane jop = new JOptionPane();
 					jop.showMessageDialog(null, "Entrez un entier positif", "Attention", JOptionPane.WARNING_MESSAGE);
-					((AbstractTableModel) table.getModel()).setValueAt(0,
-							this.row, (this.column - 1));
+					((AbstractTableModel) table.getModel()).setValueAt(0, this.row, (this.column - 1));
 				}
 
 				else {
@@ -81,11 +78,9 @@ public class ButtonEditor extends DefaultCellEditor {
 				;
 
 				// Prend la valeur dans Transaction
-				Object k = ((AbstractTableModel) table.getModel()).getValueAt(
-						this.row, (this.column - 1));
+				Object k = ((AbstractTableModel) table.getModel()).getValueAt(this.row, (this.column - 1));
 				// Prend la valeur dans Nombre d'actions
-				Object kbis = ((AbstractTableModel) table.getModel())
-						.getValueAt(this.row, (this.column - 3));
+				Object kbis = ((AbstractTableModel) table.getModel()).getValueAt(this.row, (this.column - 3));
 
 				// On veut que k devienne un entier.
 
@@ -94,45 +89,36 @@ public class ButtonEditor extends DefaultCellEditor {
 
 				if (transaction >= 0) {
 					// Change la valeur de Nombre d'actions
-					((AbstractTableModel) table.getModel()).setValueAt(
-							transaction + nombreactions, this.row,
+					((AbstractTableModel) table.getModel()).setValueAt(transaction + nombreactions, this.row,
 							(this.column - 3));
 					// Permet de mettre ï¿½ jour directement la valeur, pas
 					// besoin de cliquer sur un autre bouton pour que ï¿½a soit
 					// le cas.
-					((AbstractTableModel) table.getModel())
-							.fireTableCellUpdated(this.row, (this.column - 3));
+					((AbstractTableModel) table.getModel()).fireTableCellUpdated(this.row, (this.column - 3));
 					this.button = ((JButton) event.getSource());
 				} else {
+					JOptionPane jop = new JOptionPane();
+					jop.showMessageDialog(null, "Entrez un entier positif", "Attention", JOptionPane.WARNING_MESSAGE);
 					transaction = 0;
 				}
 
-				Object colonneprix = ((AbstractTableModel) table.getModel())
-						.getValueAt(this.row, (this.column - 4));
+				Object colonneprix = ((AbstractTableModel) table.getModel()).getValueAt(this.row, (this.column - 4));
 				// On caste colonneprix en double
 				Float p = (Float) colonneprix;
 				// double prix=Double.parseDouble(p);
 				double total = p * (transaction + nombreactions);
-				// Chnage la valeur de Total
-				((AbstractTableModel) table.getModel()).setValueAt(total,
-						this.row, (this.column - 2));
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(
-						this.row, (this.column - 2));
+				// Change la valeur de Total
+				((AbstractTableModel) table.getModel()).setValueAt(total, this.row, (this.column - 2));
+				((AbstractTableModel) table.getModel()).fireTableCellUpdated(this.row, (this.column - 2));
 
 				// Remet Ã  0 la colonne Transaction
-				((AbstractTableModel) table.getModel()).setValueAt(
-						"Montant?", this.row, (this.column - 1));
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(
-						this.row, (this.column - 1));
+				((AbstractTableModel) table.getModel()).setValueAt("Montant?", this.row, (this.column - 1));
+				((AbstractTableModel) table.getModel()).fireTableCellUpdated(this.row, (this.column - 1));
 				// Récupère les valeurs de la colonne Total
-				Object total0 = ((AbstractTableModel) table.getModel())
-						.getValueAt(0, 4);
-				Object total1 = ((AbstractTableModel) table.getModel())
-						.getValueAt(1, 4);
-				Object total2 = ((AbstractTableModel) table.getModel())
-						.getValueAt(2, 4);
-				Object total3 = ((AbstractTableModel) table.getModel())
-						.getValueAt(3, 4);
+				Object total0 = ((AbstractTableModel) table.getModel()).getValueAt(0, 4);
+				Object total1 = ((AbstractTableModel) table.getModel()).getValueAt(1, 4);
+				Object total2 = ((AbstractTableModel) table.getModel()).getValueAt(2, 4);
+				Object total3 = ((AbstractTableModel) table.getModel()).getValueAt(3, 4);
 				// Transforme les valeurs en double
 				double t0 = (Double) total0;
 				double t1 = (Double) total1;
@@ -141,55 +127,44 @@ public class ButtonEditor extends DefaultCellEditor {
 				// Calcul la somme des totaux
 				double sommet = t0 + t1 + t2 + t3;
 				// Affiche la somme
-				((AbstractTableModel) table.getModel())
-						.setValueAt(sommet, 4, 4);
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(4,
-						4);
+				((AbstractTableModel) table.getModel()).setValueAt(sommet, 4, 4);
+				((AbstractTableModel) table.getModel()).fireTableCellUpdated(4, 4);
 				// Récupère les valeurs de la colonne Nombre d'Actions
-				Object nbaction0 = ((AbstractTableModel) table.getModel())
-						.getValueAt(0, 3);
-				Object nbaction1 = ((AbstractTableModel) table.getModel())
-						.getValueAt(1, 3);
-				Object nbaction2 = ((AbstractTableModel) table.getModel())
-						.getValueAt(2, 3);
-				Object nbaction3 = ((AbstractTableModel) table.getModel())
-						.getValueAt(3, 3);
+				Object nbaction0 = ((AbstractTableModel) table.getModel()).getValueAt(0, 3);
+				Object nbaction1 = ((AbstractTableModel) table.getModel()).getValueAt(1, 3);
+				Object nbaction2 = ((AbstractTableModel) table.getModel()).getValueAt(2, 3);
+				Object nbaction3 = ((AbstractTableModel) table.getModel()).getValueAt(3, 3);
 				// Transforme les valeurs en double
 				int nba0 = (Integer) nbaction0;
 				int nba1 = (Integer) nbaction1;
 				int nba2 = (Integer) nbaction2;
 				int nba3 = (Integer) nbaction3;
-				// Calcul la somme des actions
-				int sommea = nba0 + nba1 + nba2 + nba3;
-				// Affiche la somme
-				((AbstractTableModel) table.getModel())
-						.setValueAt(sommea, 4, 3);
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(4,
-						3);
+				// Modification dans la base de donnée.
+				BDD bdd = new BDD("BDD.sqlite");
+				bdd.setBDD(nba0,1);
+				bdd.setBDD(nba1,2);
+				bdd.setBDD(nba2,3);
+				bdd.setBDD(nba3,4);
+				
 
 				this.button = ((JButton) event.getSource());
 			}
 
-			// dÃ©but de l'action Vendre
+			// debut de l'action Vendre
 			else {
-				if (((AbstractTableModel) table.getModel()).getValueAt(
-						this.row, (5)) == null
-						|| ((AbstractTableModel) table.getModel()).getValueAt(
-								this.row, (5)) == "Montant?") {
+				if (((AbstractTableModel) table.getModel()).getValueAt(this.row, (5)) == null
+						|| ((AbstractTableModel) table.getModel()).getValueAt(this.row, (5)) instanceof String) {
 					JOptionPane jop = new JOptionPane();
 					jop.showMessageDialog(null, "Entrez un entier positif", "Attention", JOptionPane.WARNING_MESSAGE);
-					((AbstractTableModel) table.getModel()).setValueAt(0,
-							this.row, (5));
+					((AbstractTableModel) table.getModel()).setValueAt(0, this.row, (5));
 				}
 				// Prend la valeur de Transaction
-				Object k = ((AbstractTableModel) table.getModel()).getValueAt(
-						this.row, (this.column - 2));
+				Object k = ((AbstractTableModel) table.getModel()).getValueAt(this.row, (this.column - 2));
 				if (k == null) {
 					k = 0;
 				}
 				// Prend la valeur de Nombre d'actions
-				Object kbis = ((AbstractTableModel) table.getModel())
-						.getValueAt(this.row, (this.column - 4));
+				Object kbis = ((AbstractTableModel) table.getModel()).getValueAt(this.row, (this.column - 4));
 
 				// On veut que k devienne un entier.
 
@@ -197,37 +172,32 @@ public class ButtonEditor extends DefaultCellEditor {
 				int nombreactions = (Integer) kbis;
 
 				if (transaction < 0) {
+					JOptionPane jop = new JOptionPane();
+					jop.showMessageDialog(null, "Entrez un entier positif", "Attention", JOptionPane.WARNING_MESSAGE);
 					transaction = 0;
 
 				} else if (nombreactions - transaction >= 0) {
 					// Change la valeur de Nombre d'actions
-					((AbstractTableModel) table.getModel()).setValueAt(
-							nombreactions - transaction, this.row,
+					((AbstractTableModel) table.getModel()).setValueAt(nombreactions - transaction, this.row,
 							(this.column - 4));
 					// Permet de mettre ï¿½ jour directement la valeur, pas
 					// besoin de cliquer sur un autre bouton pour que ï¿½a soit
 					// le cas.
-					((AbstractTableModel) table.getModel())
-							.fireTableCellUpdated(this.row, this.column - 4);
+					((AbstractTableModel) table.getModel()).fireTableCellUpdated(this.row, this.column - 4);
 					this.button = ((JButton) event.getSource());
 
 					// si Transaction trop Ã©levÃ©e remet la colonne Nombre
 					// d'action Ã  0
 				} else {
-					((AbstractTableModel) table.getModel()).setValueAt(0,
-							this.row, (this.column - 4));
-					((AbstractTableModel) table.getModel())
-							.fireTableCellUpdated(this.row, this.column - 4);
+					((AbstractTableModel) table.getModel()).setValueAt(0, this.row, (this.column - 4));
+					((AbstractTableModel) table.getModel()).fireTableCellUpdated(this.row, this.column - 4);
 				}
 
 				// Remet ï¿½ 0 Transaction 0 aprï¿½s action du bouton
-				((AbstractTableModel) table.getModel()).setValueAt(
-						"Montant?", this.row, (this.column - 2));
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(
-						this.row, this.column - 2);
+				((AbstractTableModel) table.getModel()).setValueAt("Montant?", this.row, (this.column - 2));
+				((AbstractTableModel) table.getModel()).fireTableCellUpdated(this.row, this.column - 2);
 
-				Object colonneprix = ((AbstractTableModel) table.getModel())
-						.getValueAt(this.row, (this.column - 5));
+				Object colonneprix = ((AbstractTableModel) table.getModel()).getValueAt(this.row, (this.column - 5));
 				// On caste colonneprix en double
 				Float p = (Float) colonneprix;
 				// double prix=Double.parseDouble(p);
@@ -235,19 +205,13 @@ public class ButtonEditor extends DefaultCellEditor {
 				if (produit < 0) {
 					produit = 0;
 				}
-				((AbstractTableModel) table.getModel()).setValueAt(produit,
-						this.row, (this.column - 3));
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(
-						this.row, (this.column - 3));
+				((AbstractTableModel) table.getModel()).setValueAt(produit, this.row, (this.column - 3));
+				((AbstractTableModel) table.getModel()).fireTableCellUpdated(this.row, (this.column - 3));
 				// Récupère les valeurs de la colonne Total
-				Object total0 = ((AbstractTableModel) table.getModel())
-						.getValueAt(0, 4);
-				Object total1 = ((AbstractTableModel) table.getModel())
-						.getValueAt(1, 4);
-				Object total2 = ((AbstractTableModel) table.getModel())
-						.getValueAt(2, 4);
-				Object total3 = ((AbstractTableModel) table.getModel())
-						.getValueAt(3, 4);
+				Object total0 = ((AbstractTableModel) table.getModel()).getValueAt(0, 4);
+				Object total1 = ((AbstractTableModel) table.getModel()).getValueAt(1, 4);
+				Object total2 = ((AbstractTableModel) table.getModel()).getValueAt(2, 4);
+				Object total3 = ((AbstractTableModel) table.getModel()).getValueAt(3, 4);
 				// Transforme les valeurs en double
 				double t0 = (Double) total0;
 				double t1 = (Double) total1;
@@ -256,31 +220,25 @@ public class ButtonEditor extends DefaultCellEditor {
 				// Calcul la somme des totaux
 				double sommet = t0 + t1 + t2 + t3;
 				// Affiche la somme
-				((AbstractTableModel) table.getModel())
-						.setValueAt(sommet, 4, 4);
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(4,
-						4);
+				((AbstractTableModel) table.getModel()).setValueAt(sommet, 4, 4);
+				((AbstractTableModel) table.getModel()).fireTableCellUpdated(4, 4);
 				// Récupère les valeurs de la colonne Nombre d'Actions
-				Object nbaction0 = ((AbstractTableModel) table.getModel())
-						.getValueAt(0, 3);
-				Object nbaction1 = ((AbstractTableModel) table.getModel())
-						.getValueAt(1, 3);
-				Object nbaction2 = ((AbstractTableModel) table.getModel())
-						.getValueAt(2, 3);
-				Object nbaction3 = ((AbstractTableModel) table.getModel())
-						.getValueAt(3, 3);
+				Object nbaction0 = ((AbstractTableModel) table.getModel()).getValueAt(0, 3);
+				Object nbaction1 = ((AbstractTableModel) table.getModel()).getValueAt(1, 3);
+				Object nbaction2 = ((AbstractTableModel) table.getModel()).getValueAt(2, 3);
+				Object nbaction3 = ((AbstractTableModel) table.getModel()).getValueAt(3, 3);
 				// Transforme les valeurs en double
 				int nba0 = (Integer) nbaction0;
 				int nba1 = (Integer) nbaction1;
 				int nba2 = (Integer) nbaction2;
 				int nba3 = (Integer) nbaction3;
-				// Calcul la somme des actions
-				int sommea = nba0 + nba1 + nba2 + nba3;
-				// Affiche la somme
-				((AbstractTableModel) table.getModel())
-						.setValueAt(sommea, 4, 3);
-				((AbstractTableModel) table.getModel()).fireTableCellUpdated(4,
-						3);
+				// Modification dans la base de donnée.
+				BDD bdd = new BDD("BDD.sqlite");
+				bdd.setBDD(nba0,1);
+				bdd.setBDD(nba1,2);
+				bdd.setBDD(nba2,3);
+				bdd.setBDD(nba3,4);
+				
 				this.button = ((JButton) event.getSource());
 
 			}
