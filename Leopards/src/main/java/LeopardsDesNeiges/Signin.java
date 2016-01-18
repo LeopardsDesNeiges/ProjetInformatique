@@ -26,7 +26,7 @@ public class Signin extends JFrame implements ActionListener {
 	JPanel register;
 	JLabel UserName, Password;
 	JButton exit, validation;
-	JTextField txtUserName;
+	JTextField txtUserName, txtpwd;
 	JPasswordField pwdField;
 	Dimension dsSize;
 	Toolkit toolkit = Toolkit.getDefaultToolkit();

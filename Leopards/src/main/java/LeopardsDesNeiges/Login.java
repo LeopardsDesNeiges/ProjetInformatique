@@ -31,13 +31,12 @@ import javax.swing.JTextField;
 public class Login extends JFrame implements ActionListener, MouseListener {
 	private String Path = "BDD.sqlite";
 	JPanel pnlLogin;
-	JLabel UserName, Password;
+	JLabel UserName, Password, BobName, Bodword, P;
 	JButton login1, exit1, inscription;
-	JTextField txtUserName;
+	JTextField txtUserName, txtpwd;
 	JPasswordField alicefield;
 	Dimension dsSize;
 	Toolkit toolkit = Toolkit.getDefaultToolkit();
-
 	
 	public Login() {
 		super("Fenetre de connexion");
