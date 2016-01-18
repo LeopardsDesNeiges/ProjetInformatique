@@ -31,9 +31,9 @@ import javax.swing.JTextField;
 public class Login extends JFrame implements ActionListener, MouseListener {
 	private String Path = "BDD.sqlite";
 	JPanel pnlLogin;
-	JLabel UserName, Password, BobName, Bodword, P;
+	JLabel UserName, Password;
 	JButton login1, exit1, inscription;
-	JTextField txtUserName, txtpwd;
+	JTextField txtUserName;
 	JPasswordField alicefield;
 	Dimension dsSize;
 	Toolkit toolkit = Toolkit.getDefaultToolkit();
