@@ -326,7 +326,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 				int row = tableau.getSelectedRow();
 				if (row == tableau.getRowCount() - 1) {
 					JOptionPane.showMessageDialog(null,
-							"Cette ligne ne peut pas être retirée", "Attention",
+							"Cette ligne ne peut pas Ãªtre retirÃ©e", "Attention",
 							JOptionPane.WARNING_MESSAGE);
 
 				} else {
@@ -338,8 +338,8 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 						JOptionPane
 								.showMessageDialog(
 										null,
-										"Vous possédez encore des actions de cette entreprise! "
-												+ "Veuillez les vendre pour procéder à la suppression",
+										"Vous possÃ©dez encore des actions de cette entreprise! "
+												+ "Veuillez les vendre pour procÃ©der Ã  la suppression",
 										"Attention",
 										JOptionPane.WARNING_MESSAGE);
 
@@ -368,50 +368,50 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 				.getModel()).getValueAt(tableau.getSelectedRow(), 0);
 		Double limiteSup = bdd.getlimSup(symbole);
 		Double limiteInf = bdd.getlimInf(symbole);
-		JLabel labLimSup = new JLabel("Limite supérieure => $" + limiteSup);
-		JLabel labLimInf = new JLabel("Limite inférieure   => $" + limiteInf);
-		JLabel labAchatAuto = new JLabel("Nombre d'action à acheter");
-		JLabel labPrixAchatAuto = new JLabel("Prix limite inférieur");
+		JLabel labLimSup = new JLabel("Limite supÃ©rieure => $" + limiteSup);
+		JLabel labLimInf = new JLabel("Limite infÃ©rieure   => $" + limiteInf);
+		JLabel labAchatAuto = new JLabel("Nombre d'action Ã  acheter");
+		JLabel labPrixAchatAuto = new JLabel("Prix limite infÃ©rieur");
 		JLabel titreAchatAuto = new JLabel("Achat Automatique :");
-		JLabel titreLimites = new JLabel("Paramètres de visualisation");
-		JLabel labVenteAuto = new JLabel("Nombre d'action à vendre");
-		JLabel labPrixVenteAuto = new JLabel("Prix limite supérieur");
+		JLabel titreLimites = new JLabel("ParamÃ¨tres de visualisation");
+		JLabel labVenteAuto = new JLabel("Nombre d'action Ã  vendre");
+		JLabel labPrixVenteAuto = new JLabel("Prix limite supÃ©rieur");
 		JLabel titreVenteAuto = new JLabel("Vente Automatique :");
 
 		JLabel regleAchatAutoNon = new JLabel(
-				"Vous n'avez actuellement aucune règle d'achat paramétrée.");
+				"Vous n'avez actuellement aucune rÃ¨gle d'achat paramÃ©trÃ©e.");
 		JLabel regleAchatAutoOui = new JLabel(
 						+ bdd.getachatAuto(symbole)
-						+ " action(s) à acheter si le prix de l'action est inférieur $"
+						+ " action(s) Ã  acheter si le prix de l'action est infÃ©rieur $"
 						+ bdd.getprixAchatAuto(symbole));
 
 		JLabel regleVenteAutoNon = new JLabel(
-				"Vous n'avez actuellement aucune règle de vente paramétrée.");
+				"Vous n'avez actuellement aucune rÃ¨gle de vente paramÃ©trÃ©e.");
 		JLabel regleVenteAutoOui = new JLabel(
 						+ bdd.getVenteAuto(symbole)
-						+ " action(s) à vendre si le prix de l'action est supérieur à $"
+						+ " action(s) Ã  vendre si le prix de l'action est supÃ©rieur Ã  $"
 						+ bdd.getprixVenteAuto(symbole));
 
 		JButton annulerRegleAchat = new JButton("Annuler");
 		JButton annulerRegleVente = new JButton("Annuler");
-		JButton ouiAncienneRègleAchat = new JButton("Oui");
-		JButton ouiAncienneRègleVente = new JButton("Oui");
+		JButton ouiAncienneRÃ¨gleAchat = new JButton("Oui");
+		JButton ouiAncienneRÃ¨gleVente = new JButton("Oui");
 
-		JLabel ancienneRegles = new JLabel("Anciennes règles");
+		JLabel ancienneRegles = new JLabel("Anciennes rÃ¨gles");
 		JLabel reglememAchatAutoOui = new JLabel(
 				"Activer "
 						+ bdd.getmemAchatAuto(symbole)
-						+ " action(s) à acheter si le prix de l'action est inférieur à $"
+						+ " action(s) Ã  acheter si le prix de l'action est infÃ©rieur Ã  $"
 						+ bdd.getmemPrixAchatAuto(symbole) + "?");
 		JLabel reglememVenteAutoOui = new JLabel(
 				"Activer "
 						+ bdd.getmemVenteAuto(symbole)
-						+ " action(s) à vendre si le prix de l'action est supérieur à $"
+						+ " action(s) Ã  vendre si le prix de l'action est supÃ©rieur Ã  $"
 						+ bdd.getmemPrixVenteAuto(symbole) + "?");
 		JLabel reglememAchatAutoNon = new JLabel(
-				"Aucune règle précédente pour l'achat automatique");
+				"Aucune rÃ¨gle prÃ©cÃ©dente pour l'achat automatique");
 		JLabel reglememVenteAutoNon = new JLabel(
-				"Aucune règle précédente pour la vente automatique");
+				"Aucune rÃ¨gle prÃ©cÃ©dente pour la vente automatique");
 		txtLimInf.addActionListener(this);
 		txtLimSup.addActionListener(this);
 		txtAchatAuto.addActionListener(this);
@@ -465,7 +465,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 			}
 		});
 
-		ouiAncienneRègleAchat.addMouseListener(new MouseListener() {
+		ouiAncienneRÃ¨gleAchat.addMouseListener(new MouseListener() {
 			public void mouseReleased(MouseEvent e) {
 			}
 
@@ -493,7 +493,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 			}
 		});
 
-		ouiAncienneRègleVente.addMouseListener(new MouseListener() {
+		ouiAncienneRÃ¨gleVente.addMouseListener(new MouseListener() {
 			public void mouseReleased(MouseEvent e) {
 			}
 
@@ -571,14 +571,14 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 
 		if (bdd.getmemAchatAuto(symbole) != 0) {
 			reglememAchatAutoOui.setBounds(0, 365, 450, 20);
-			ouiAncienneRègleAchat.setBounds(450, 365, 80, 20);
+			ouiAncienneRÃ¨gleAchat.setBounds(450, 365, 80, 20);
 		} else {
 			reglememAchatAutoNon.setBounds(0, 365, 450, 20);
 		}
 
 		if (bdd.getmemVenteAuto(symbole) != 0) {
 			reglememVenteAutoOui.setBounds(0, 390, 1000, 20);
-			ouiAncienneRègleVente.setBounds(450, 390, 80, 20);
+			ouiAncienneRÃ¨gleVente.setBounds(450, 390, 80, 20);
 		} else {
 			reglememVenteAutoNon.setBounds(0, 390, 1000, 20);
 		}
@@ -609,8 +609,8 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 		onglet4.add(reglememVenteAutoOui);
 		onglet4.add(reglememAchatAutoNon);
 		onglet4.add(reglememVenteAutoNon);
-		onglet4.add(ouiAncienneRègleAchat);
-		onglet4.add(ouiAncienneRègleVente);
+		onglet4.add(ouiAncienneRÃ¨gleAchat);
+		onglet4.add(ouiAncienneRÃ¨gleVente);
 
 		onglet4.setLayout(null);
 		onglet4.setBackground(new Color(228, 228, 228));
@@ -1105,7 +1105,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 
 	public void actionPerformed(ActionEvent arg0) {
 		int row = tableau.getSelectedRow();
-		JFrame frame = new JFrame("Fenêtre d'erreur");
+		JFrame frame = new JFrame("FenÃªtre d'erreur");
 
 		if (arg0.getSource() == txtLimSup) {
 			String limiteSup1 = txtLimSup.getText().trim();
@@ -1131,7 +1131,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 				JOptionPane
 						.showMessageDialog(
 								frame,
-								"Veuillez entrer une limite supérieure à la limite inférieure actuelle de $"
+								"Veuillez entrer une limite supÃ©rieure Ã  la limite infÃ©rieure actuelle de $"
 										+ bdd.getlimInf((String) ((AbstractTableModel) tableau
 												.getModel()).getValueAt(row, 0)),
 								"Attention!", JOptionPane.WARNING_MESSAGE);
@@ -1180,7 +1180,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 				JOptionPane
 						.showMessageDialog(
 								frame,
-								"Veuillez entrer une limite inférieure à la limite supérieure actuelle de $"
+								"Veuillez entrer une limite infÃ©rieure Ã  la limite supÃ©rieure actuelle de $"
 										+ bdd.getlimSup((String) ((AbstractTableModel) tableau
 												.getModel()).getValueAt(row, 0)),
 								"Attention!", JOptionPane.WARNING_MESSAGE);
@@ -1216,7 +1216,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 
 				if (Double.parseDouble(txtPrixAchatAuto.getText()) <= 0) {
 					JOptionPane.showMessageDialog(frame,
-							"Veuillez entrer un nombre supérieur à 0",
+							"Veuillez entrer un nombre supÃ©rieur Ã  0",
 							"Erreur!", JOptionPane.ERROR_MESSAGE);
 					txtPrixAchatAuto.setText("");
 				} else {
@@ -1226,7 +1226,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 						JOptionPane
 								.showMessageDialog(
 										frame,
-										"Veuillez entrer un prix inférieur au prix de la règle de vente automatique ",
+										"Veuillez entrer un prix infÃ©rieur au prix de la rÃ¨gle de vente automatique ",
 										"Attention!",
 										JOptionPane.WARNING_MESSAGE);
 						txtPrixAchatAuto.setText("");
@@ -1261,7 +1261,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 
 			if (Integer.parseInt(txtAchatAuto.getText()) <= 0) {
 				JOptionPane.showMessageDialog(frame,
-						"Veuillez entrer un entier supérieur à 0", "Erreur!",
+						"Veuillez entrer un entier supÃ©rieur Ã  0", "Erreur!",
 						JOptionPane.ERROR_MESSAGE);
 				txtAchatAuto.setText("");
 			} else {
@@ -1294,7 +1294,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 
 			if (Double.parseDouble(txtPrixVenteAuto.getText()) <= 0) {
 				JOptionPane.showMessageDialog(frame,
-						"Veuillez entrer un nombre supérieur à 0",
+						"Veuillez entrer un nombre supÃ©rieur Ã  0",
 						"Erreur!", JOptionPane.ERROR_MESSAGE);
 				txtPrixVenteAuto.setText("");
 			} else {
@@ -1304,7 +1304,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 					JOptionPane
 							.showMessageDialog(
 									frame,
-									"Veuillez entrer un prix supérieur au prix de la règle d'achat automatique ",
+									"Veuillez entrer un prix supÃ©rieur au prix de la rÃ¨gle d'achat automatique ",
 									"Attention!",
 									JOptionPane.WARNING_MESSAGE);
 					txtPrixVenteAuto.setText("");
@@ -1337,7 +1337,7 @@ public class Fenetre extends JFrame implements MouseListener, ActionListener {
 
 				if (Integer.parseInt(txtVenteAuto.getText()) <= 0) {
 					JOptionPane.showMessageDialog(frame,
-							"Veuillez entrer un entier supérieur à 0",
+							"Veuillez entrer un entier supÃ©rieur Ã  0",
 							"Erreur!", JOptionPane.ERROR_MESSAGE);
 					txtVenteAuto.setText("");
 				} else {

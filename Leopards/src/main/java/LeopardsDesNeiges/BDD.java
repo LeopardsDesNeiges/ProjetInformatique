@@ -659,7 +659,7 @@ public class BDD {
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("INSERT INTO Limte (username,limite) VALUES (?,?)");
 			preparedStatement.setString(1, jusername);
-			preparedStatement.setDouble(2, 1000);
+			preparedStatement.setDouble(2, 150);
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {

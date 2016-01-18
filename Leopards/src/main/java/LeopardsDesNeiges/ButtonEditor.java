@@ -16,6 +16,8 @@ import javax.swing.table.AbstractTableModel;
 public class ButtonEditor extends DefaultCellEditor {
 
 	protected JButton button;
+
+
 	private ButtonListener bListener = new ButtonListener();
 	BDD bdd = new BDD("BDD.sqlite");
 	public ButtonEditor(JCheckBox checkBox) {
